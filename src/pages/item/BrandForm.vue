@@ -48,7 +48,7 @@
           categories: [], // 品牌所属的商品分类数组
         },
         nameRules: [
-          v => !!v || "品牌名称不能为空",
+          v => !!v || "品牌名称不能为空", //!!v,v的值可能为空，因此!v返回布尔值
           v => v.length > 1 || "品牌名称至少2位"
         ],
         letterRules: [
@@ -59,6 +59,7 @@
     },
     methods: {
       submit() {
+
         // 表单校验
         if (this.$refs.myBrandForm.validate()) {
           // 定义一个请求参数对象，通过解构表达式来获取brand中的属性
@@ -68,11 +69,13 @@
           // 将字母都处理为大写
           params.letter = letter.toUpperCase();
           // 将数据提交到后台
+          console.log(this.$qs.stringify(params));
           // this.$http.post('/item/brand', this.$qs.stringify(params))
           this.$http({
             method: this.isEdit ? 'put' : 'post',
             url: '/item/brand',
-            data: params
+            contentType:"application/json",
+            data: this.$qs.stringify(params)
           }).then(() => {
             // 关闭窗口
             this.$emit("close");

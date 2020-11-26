@@ -25,9 +25,17 @@
       }
     },
     methods: {
+      //新增节点
       handleAdd(node) {
         console.log("add .... ");
         console.log(node);
+        this.$http.post("/item/category/add",
+          {data:{category:JSON.stringify(node)}}
+      ).then(resp => {
+          console.log("add...success:{}",resp)
+        }).catch(err => {
+          console.log("add...fail")
+        })
       },
       handleEdit(id, name) {
         console.log("edit... id: " + id + ", name: " + name)
