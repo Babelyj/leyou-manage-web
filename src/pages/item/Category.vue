@@ -1,7 +1,7 @@
 <template>
   <v-card>
       <v-flex xs12 sm10>
-        <v-tree url="/item/category/list"
+        <v-tree ref="tree" url="/item/category/list"
 
                 :isEdit="isEdit"
                 @handleAdd="handleAdd"
@@ -29,22 +29,38 @@
       handleAdd(node) {
         console.log("add .... ");
         console.log(node);
-        this.$http.post("/item/category/add",
-          {data:{category:JSON.stringify(node)}}
-      ).then(resp => {
-          console.log("add...success:{}",resp)
-        }).catch(err => {
-          console.log("add...fail")
+
+        this.$http({
+          method: 'post',
+          url: '/item/category',
+          contentType:"application/json",
+          data: this.$qs.stringify(node)
+        }).then(() => {
+          // 关闭窗口
+          //this.$emit("close");
+          this.reloadData(node.id);
+          this.$message.success("保存成功！");
         })
+          .catch(() => {
+            this.$message.error("保存失败！");
+          });
       },
       handleEdit(id, name) {
         console.log("edit... id: " + id + ", name: " + name)
       },
       handleDelete(id) {
-        console.log("delete ... " + id)
+        console.log("delete ... " + id);
+        this.$http.delete("/item/category/cid/"+id).then(()=>{
+          this.$message.success("删除成功!");
+        }).catch(()=>{
+          this.$message.error("删除失败!")
+        })
       },
       handleClick(node) {
         console.log(node)
+      },
+      reloadData(id){
+        this.$http.get("/item/category/list?pid="+1).then().catch();
       }
     }
   };
