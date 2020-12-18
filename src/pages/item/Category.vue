@@ -46,7 +46,20 @@
           });
       },
       handleEdit(id, name) {
+        const node = {
+          id : id,
+          name : name
+        }
         console.log("edit... id: " + id + ", name: " + name)
+        this.$http({
+          method : 'put',
+          url : 'item/category',
+          data : this.$qs.stringify(node)
+        }).catch(()=>{
+          this.$message.success("修改成功！")
+        }).catch(()=>{
+          this.$message.error("修改失败！")
+        })
       },
       handleDelete(id) {
         console.log("delete ... " + id);
